@@ -40,5 +40,5 @@ func init() {
 
 func searchMovie(movieString string) {
 	fmt.Printf("Searching for %s\n", movieString)
-	core.Example()
+	core.SearchMovie(movieString)
 }
