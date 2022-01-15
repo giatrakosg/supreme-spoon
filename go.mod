@@ -3,9 +3,14 @@ module github.com/giatrakosg/supreme-spoon
 go 1.17
 
 require (
+	github.com/cenkalti/rain v1.8.6
+	github.com/spf13/cobra v1.3.0
+	github.com/spf13/viper v1.10.1
+)
+
+require (
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/cenkalti/log v1.0.0 // indirect
-	github.com/cenkalti/rain v1.8.6 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
@@ -34,10 +39,8 @@ require (
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
-	github.com/spf13/cobra v1.3.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.10.1 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/youtube/vitess v3.0.0-rc.3+incompatible // indirect
 	github.com/zeebo/bencode v1.0.0 // indirect
