@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 
 	// "strconv"
-	// "github.com/manifoldco/promptui"
+	"github.com/manifoldco/promptui"
 	// "errors"
 
 )
@@ -56,8 +56,6 @@ func SearchMovie(movie string) {
 	// assign encoded query string to http request
 	req.URL.RawQuery = q.Encode()
 
-	fmt.Println(q.Encode())
-
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("Errored when sending request to the server")
@@ -70,7 +68,6 @@ func SearchMovie(movie string) {
 		log.Fatal(err)
 	}
 
-	fmt.Println(resp.Status)
 	if(resp.Status != "200 OK") {
 		log.Print("Error reaching api")
 		return
@@ -79,31 +76,29 @@ func SearchMovie(movie string) {
 	json.Unmarshal(responseBody, &yts)
 	//fmt.Println(string(responseBody))
 
-	for _, movie:= range yts.Data.Movies {
-		fmt.Printf("Title:%s, Year:%d , Summary:%s \n",movie.Title, movie.Year, movie.Summary)
+	SelectMovie(yts.Data.Movies)
+	
+}
+
+func SelectMovie(movies []Movie) {
+	var Items []string
+	for _, movie:= range movies {
+		Items = append(Items, movie.Title)
 	}
 
+	prompt := promptui.Select{
+		Label: "Select Movie",
+		Items: Items,
+		Size: 20,
+	}
+	
+	pos, result, err := prompt.Run()
 
-	// validate := func(input string) error {
-	// 	_, err := strconv.ParseFloat(input, 64)
-	// 	if err != nil {
-	// 		return errors.New("Invalid number")
-	// 	}
-	// 	return nil
-	// }
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return
+	}
 
-	// prompt := promptui.Prompt{
-	// 	Label:    "Number",
-	// 	Validate: validate,
-	// }
-
-	// result, err := prompt.Run()
-
-	// if err != nil {
-	// 	fmt.Printf("Prompt failed %v\n", err)
-	// 	return
-	// }
-
-	// fmt.Printf("You choose %q\n", result)
+	fmt.Printf("You choose the %d option %q\n", pos, result)
 
 }

@@ -5,8 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/giatrakosg/supreme-spoon/core"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +17,6 @@ var searchCmd = &cobra.Command{
 	
 	eg. supreme-spoon search "The Killing of a Chinese Bookie"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("search called")
 		searchMovie(args[0])
 	},
 }
@@ -39,6 +36,5 @@ func init() {
 }
 
 func searchMovie(movieString string) {
-	fmt.Printf("Searching for %s\n", movieString)
 	core.SearchMovie(movieString)
 }
