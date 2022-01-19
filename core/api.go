@@ -140,6 +140,9 @@ func SelectMovie(movies []Movie) {
 	filePath := fmt.Sprintf("./data/%s.torrent", selectedMovie.Slug)
 
 	downloadFile(filePath, selectedTorrent.Url)
+
+	fmt.Println("Downloading torrent")
+	DownloadTorrent(filePath)
 }
 
 /*

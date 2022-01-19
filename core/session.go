@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cenkalti/rain/torrent"
+	"github.com/schollz/progressbar/v3"
 )
 
 func sessionTorrentInfo(ses *torrent.Session) {
@@ -48,5 +49,28 @@ func Example() {
 		s := tor.Stats()
 		log.Printf("Status: %s, Downloaded: %d, Total %d, Peers: %d", s.Status.String(), s.Bytes.Completed, s.Bytes.Total, s.Peers.Total)
 	}
+}
 
+func DownloadTorrent(path string) {
+	torrent.DisableLogging()
+	session, error := torrent.NewSession(torrent.DefaultConfig)
+	if error != nil {
+		fmt.Println("Error creating session")
+	}
+
+	file, _ := os.Open(path)
+	tor, _ := session.AddTorrent(file, nil)
+
+	s := tor.Stats()
+	bar := progressbar.Default(s.Bytes.Total)
+
+	// Watch the progress
+	previousTotal := 0
+	for range time.Tick(time.Second) {
+		s := tor.Stats()
+		newTotal := s.Bytes.Completed
+		change := int(newTotal) - previousTotal
+		previousTotal = int(newTotal)
+		bar.Add(change)
+	}
 }
