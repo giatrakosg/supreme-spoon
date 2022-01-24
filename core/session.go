@@ -37,3 +37,23 @@ func DownloadTorrent(path string) {
 		bar.Set64(int64(float64(s.Bytes.Completed) * MEGABYTE))
 	}
 }
+
+type TorrentInfo struct {
+	Name       string
+	Downloaded int
+	Total      int
+}
+
+func ListTorrents() {
+	torrent.DisableLogging()
+	session, error := torrent.NewSession(torrent.DefaultConfig)
+	if error != nil {
+		fmt.Println("Error creating session")
+	}
+	torrents := session.ListTorrents()
+	var torrentInfos []TorrentInfo
+	for _, tor := range torrents {
+		torrentInfos = append(torrentInfos, TorrentInfo{tor.Name(), int(tor.Stats().Bytes.Completed), int(tor.Stats().Bytes.Total)})
+	}
+	ViewTorrents(torrentInfos)
+}

@@ -60,3 +60,27 @@ func SelectMovie(movies []Movie) {
 	fmt.Println("Downloading torrent")
 	DownloadTorrent(filePath)
 }
+
+func ViewTorrents(torrents []TorrentInfo) {
+	movieTemplate := &promptui.SelectTemplates{
+		Label:    "{{ .Title | cyan}} {{ .Year | cyan}}",
+		Active:   "{{ .Title | red }} {{ .Year | red}}",
+		Inactive: "{{ .Title | cyan}} {{ .Year | cyan}}",
+		Selected: "{{ .Title | cyan}} {{ .Year | cyan}}",
+	}
+
+	movieSelector := promptui.Select{
+		Label:     "Select Movie",
+		Items:     torrents,
+		Size:      20,
+		Templates: movieTemplate,
+	}
+
+	_, _, err := movieSelector.Run()
+
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return
+	}
+
+}
