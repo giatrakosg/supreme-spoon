@@ -2,40 +2,25 @@ package core
 
 import (
 	"fmt"
-	"os"
-	"time"
+	"log"
 
-	"github.com/cenkalti/rain/torrent"
-	"github.com/schollz/progressbar/v3"
+	"github.com/anacrolix/torrent"
+	"github.com/dustin/go-humanize"
 )
 
 const MEGABYTE = 1e-6
 
 func DownloadTorrent(path string) {
-	torrent.DisableLogging()
-
-	cfg := torrent.DefaultConfig
-
-	cfg.DataDirIncludesTorrentID = false
-	// cfg.DataDirIncludesTorrentID = false
-	session, error := torrent.NewSession(cfg)
-	if error != nil {
-		fmt.Println("Error creating session")
+	c, _ := torrent.NewClient(nil)
+	defer c.Close()
+	t, _ := c.AddTorrentFromFile(path)
+	<-t.GotInfo()
+	t.DownloadAll()
+	for t.BytesMissing() > 0 {
+		fmt.Printf("Downloaded %s pieces, %s pieces are left \n", humanize.Bytes(uint64(t.BytesCompleted())), humanize.Bytes(uint64(t.BytesMissing())))
 	}
-
-	file, _ := os.Open(path)
-	tor, _ := session.AddTorrent(file, nil)
-
-	s := tor.Stats()
-
-	totalMb := float64(s.Bytes.Total) * MEGABYTE
-	bar := progressbar.Default(int64(totalMb))
-
-	// Watch the progress
-	for range time.Tick(time.Second) {
-		s := tor.Stats()
-		bar.Set64(int64(float64(s.Bytes.Completed) * MEGABYTE))
-	}
+	c.WaitAll()
+	log.Print("ermahgerd, torrent downloaded")
 }
 
 type TorrentInfo struct {
@@ -45,15 +30,15 @@ type TorrentInfo struct {
 }
 
 func ListTorrents() {
-	torrent.DisableLogging()
-	session, error := torrent.NewSession(torrent.DefaultConfig)
-	if error != nil {
-		fmt.Println("Error creating session")
-	}
-	torrents := session.ListTorrents()
-	var torrentInfos []TorrentInfo
-	for _, tor := range torrents {
-		torrentInfos = append(torrentInfos, TorrentInfo{tor.Name(), int(tor.Stats().Bytes.Completed), int(tor.Stats().Bytes.Total)})
-	}
-	ViewTorrents(torrentInfos)
+	// torrent.DisableLogging()
+	// session, error := torrent.NewSession(torrent.DefaultConfig)
+	// if error != nil {
+	// 	fmt.Println("Error creating session")
+	// }
+	// torrents := session.ListTorrents()
+	// var torrentInfos []TorrentInfo
+	// for _, tor := range torrents {
+	// 	torrentInfos = append(torrentInfos, TorrentInfo{tor.Name(), int(tor.Stats().Bytes.Completed), int(tor.Stats().Bytes.Total)})
+	// }
+	// ViewTorrents(torrentInfos)
 }
