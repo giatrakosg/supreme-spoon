@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/manifoldco/promptui"
 )
@@ -55,7 +56,11 @@ func SelectMovie(movies []Movie) {
 
 	filePath := fmt.Sprintf("./data/%s.torrent", selectedMovie.Slug)
 
-	downloadFile(filePath, selectedTorrent.Url)
+	err = downloadFile(filePath, selectedTorrent.Url)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 
 	fmt.Println("Downloading torrent")
 	DownloadTorrent(filePath)

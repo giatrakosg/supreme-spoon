@@ -8,8 +8,6 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-const MEGABYTE = 1e-6
-
 func DownloadTorrent(path string) {
 	c, _ := torrent.NewClient(nil)
 	defer c.Close()

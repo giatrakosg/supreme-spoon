@@ -81,7 +81,10 @@ func SearchMovie(movie string) {
 		return
 	}
 	var yts YTSResponse
-	json.Unmarshal(responseBody, &yts)
+	err = json.Unmarshal(responseBody, &yts)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Show the select movie ui
 	SelectMovie(yts.Data.Movies)
