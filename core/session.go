@@ -1,24 +1,33 @@
 package core
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/anacrolix/torrent"
-	"github.com/dustin/go-humanize"
+	"github.com/schollz/progressbar/v3"
 )
 
 func DownloadTorrent(path string) {
-	c, _ := torrent.NewClient(nil)
+	// Download torrent in path
+	cfg := torrent.NewDefaultClientConfig()
+	cfg.DataDir = "./data/"
+	cfg.Debug = false
+
+	c, _ := torrent.NewClient(cfg)
 	defer c.Close()
 	t, _ := c.AddTorrentFromFile(path)
 	<-t.GotInfo()
 	t.DownloadAll()
+
+	bar := progressbar.DefaultBytes(t.BytesMissing(), "Dowloading torrent")
 	for t.BytesMissing() > 0 {
-		fmt.Printf("Downloaded %s pieces, %s pieces are left \n", humanize.Bytes(uint64(t.BytesCompleted())), humanize.Bytes(uint64(t.BytesMissing())))
+		err := bar.Set(int(t.BytesCompleted()))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
+
 	c.WaitAll()
-	log.Print("ermahgerd, torrent downloaded")
 }
 
 type TorrentInfo struct {
