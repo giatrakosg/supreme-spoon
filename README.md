@@ -1,27 +1,19 @@
 # supreme-spoon
 
 ## Aim
- The aim of this project is to provide functionality for movie watching. We want to implement finding and downloading torrents easily.
-We plan on adding a Frontend in React to facilitate controlling the downloaded torrents. We also plan to add an API for controlling 
-the app that will be running as a local service.
- We want to implement a microservice architecture for the various services we will be running. We also want to create a small Android app.
+The aim of this project is to implement a film watching application. We want to support finding movies and their corresponding torrents.
+We also want to include functionality for searching for movies, taking notes, controlling VLC player and taking notes.
+
+We will use a microservice architecture mainly for educational purposes. The main technology stack will be Go(BE) and React(FE).
 
 ## Future Plans
- 1. VLC support
- 2. Web UI
- 3. Android App
- 4. Note taking during parts of a movie
- 5. Letterboxd connection
+We plan on implementing the following microservices
+| Service Name | Description |
+|---|---|
+| Torrent | Add, pause, delete torrents |
+| Search | Search titles and retrieve torrent magnets/files |
+| Media Player | Control VLC media player |
+| Notes | Keep notes on scenes |
+| Watchlist | Keep track of watchlist |
 
-# Installation
- You can build the package in the standard go way
 
-        go build
-
-# Usage
-The CLI offers the following functionality:
-
-## Search
-We search for a torrent in the YTS api and return a prompt so the user can select a movie.
-
-        ./supreme-spoon search [Movie Title]
