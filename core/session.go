@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/anacrolix/torrent"
+	"github.com/gen2brain/beeep"
 	"github.com/schollz/progressbar/v3"
 )
 
@@ -19,14 +20,17 @@ func DownloadTorrent(path string) {
 	<-t.GotInfo()
 	t.DownloadAll()
 
-	bar := progressbar.DefaultBytes(t.BytesMissing(), "Dowloading torrent")
+	bar := progressbar.DefaultBytes(t.BytesMissing(), "Downloading torrent")
 	for t.BytesMissing() > 0 {
 		err := bar.Set(int(t.BytesCompleted()))
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-
+	err := beeep.Notify("Download finished", "Your download has finished succesfully", "assets/check-mark.png")
+	if err != nil {
+		panic(err)
+	}
 	c.WaitAll()
 }
 
